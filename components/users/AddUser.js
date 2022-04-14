@@ -1,28 +1,25 @@
 import React,{useState , useEffect,useRef} from 'react'
+import { MainLink } from '../BaseUrl/BaseUrl';
+import { useRouter } from 'next/router';
 
 //import styles
 import styles from "./adduser.module.css"
 
+//import modules
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const AddUser = () => {
 
+    const redirect = new useRouter();
 
-    const [photos , setPhotos]  = useState({
-        photo: null,
-        photo1: null,
-        photo2: null,
-        avatar: null,
-    })
-
-    const firstFileUpload = useRef(null);
-    const secoundFileUpload = useRef(null);
-    const thridFileUpload = useRef(null);
+    const [avatar , setAvatar]  = useState(null);
 
     const [data , setData] = useState({
         username: '',
         email: '',
         firstName: '',
         lastName: '',
-        profile: null,
         nationalCode: '',
         job: '',
         state: '',
@@ -30,61 +27,58 @@ const AddUser = () => {
         address: '',
         plate: '',
         zipCode: '',
-        firstImg: null ,
-        secoundImg: null,
-        thirdImg: null,
+        is_admin: false,
+        is_oprator: false,
     })
 
-     // set state kardan input ha
      const inputsHandler = (event) => {
         if (event.target.name !== "avatar") {
            setData({...data , [event.target.name] : event.target.value})
         }else{
-            setPhotos({...photos , avatar:event.target.files[0]})
-        }
-        console.log(data);
-        console.log(photos)
-       }
-   // 
-    // set kardan img ha dar state ha 
-    const fileuploadHandler = async (event) =>{
-        if(event.target.name === "firstImg"){
-            setData({...data , firstImg: URL.createObjectURL(event.target.files[0])})
-            setPhotos({...photos , photo:event.target.files[0]})
-        }else if(event.target.name === "secoundImg"){
-            setData({...data ,secoundImg: URL.createObjectURL(event.target.files[0])})
-            setPhotos({...photos , photo1:event.target.files[0]})
-        }else if(event.target.name === "thirdImg"){
-            setData({...data ,thirdImg: URL.createObjectURL(event.target.files[0])})
-            setPhotos({...photos , photo2:event.target.files[0]})
+            setAvatar(event.target.files[0])
         }
     }
-    // 
+       
+
+    const checkboxHandler = () =>{
+        setData({...data ,[event.target.name] : event.target.checked })
+    }
     
-    // baraye inke input hide shode az tarig div karkone
-    const firstHandleUpload = () => {
-        firstFileUpload.current.click();
-        };
-    const secoundHandleUpload = () => {
-    secoundFileUpload.current.click();
-    };
-    const thirdHandleUpload = () => {
-    thridFileUpload.current.click();
-    };
-// 
 
-
-    // in baxsh baraye btn hazf mibashad ke aks preview pakshode va div nemayesh dade shavad
-    const clickHandler = (event) =>{
-        if(event.target.id === "firstImgBtn"){
-        setData({...data , firstImg: null})
-        }else if(event.target.id === "secoundImgBtn"){
-        setData({...data , secoundImg: null})
-        }else if(event.target.id === "thirdImgBtn"){
-        setData({...data , thirdImg: null})
-        }
+    const sendData = (event) =>{
+        event.preventDefault();
+        const formData = new FormData();
+        formData.append('username' , data.username);
+        formData.append('email' , data.email);
+        formData.append('first_name' , data.firstName);
+        formData.append('last_name' , data.lastName);
+        avatar && formData.append('avatar' , avatar , avatar.name);
+        formData.append('state' , data.state);
+        formData.append('city' , data.city);
+        formData.append('address' , data.address);
+        formData.append('plate' , data.plate);
+        formData.append('zip_code' , data.zipCode);
+        formData.append('is_admin' , data.is_admin);
+        formData.append('is_operator' , data.is_oprator);
+        fetch(`${MainLink}/user/`,{
+            headers:{
+                'Authorization': 'Token '+ localStorage.getItem('token'), 
+            },
+            method:"POST",
+            body:formData
+        }).then(response => {
+            if(response.status !== 401 & response.status !== 400 ){
+                response.json().then(json => {
+                    toast.success("کاربر با موفقیت ساخته شد")
+                    setTimeout(() => {
+                        redirect.push(`/users`)
+                    },5000)
+                  });
+            }else{
+                    toast.error("موارد وارد شده صحیح نمیباشد")
+            }
+      })
     }
-    // 
 
 
   return (
@@ -92,7 +86,7 @@ const AddUser = () => {
         <div className="card">
             <div className="card-body">
             <h4 className="card-title">ایجاد کاربر</h4>
-            <form className='forms-sample'>
+            <div className='forms-sample'>
                 <div className={styles.container}>
                     <div className="form-group">
                     <label htmlFor="usernameInput">نام کاربری</label>
@@ -142,69 +136,21 @@ const AddUser = () => {
                     <label htmlFor="zipCodeInput">کد پستی</label>
                     <input type="text" name='zipCode' className="form-control form-control-lg" id="zipCodeInput" placeholder=" کد پستی" onChange={inputsHandler} />
                     </div>
+                    <div className="form-check form-check-flat">
+                        <label className="form-check-label">
+                        <input type="checkbox" className="form-check-input" name='is_admin' value={data.is_admin} onChange={checkboxHandler} /> کاربر ادمین <i className="input-helper"></i></label>
+                    </div>
+                    <div className="form-check form-check-flat">
+                        <label className="form-check-label">
+                        <input type="checkbox" className="form-check-input" name='is_oprator' value={data.is_oprator} onChange={checkboxHandler} /> کاربر اپراتور <i className="input-helper"></i></label>
+                    </div>
                 </div>
-                <div className={styles.imageContainer} dir="rtl">
-                    {data.firstImg ?/* <button onClick={fileuploadclickHandler}>upload</button> */ 
-                        <div className={styles.firstImg}>
-                            <img
-                            src={data.firstImg}
-                            alt="Thumb"
-                            />
-                            <button id="firstImgBtn" onClick={clickHandler}>حدف عکس</button>
-                        </div>
-                        :
-                        <div className={styles.imgBox}>
-                            <input style={{display:"none"}} name="firstImg" onChange={fileuploadHandler} type="file" 
-                            ref={firstFileUpload} />
-                            <section onClick={() => firstHandleUpload()} className={styles.divImg}>
-                                <p>عکس کارت ملی</p>
-                            </section>
-                        </div>
-                    }
-                    {data.secoundImg ?/* <button onClick={fileuploadclickHandler}>upload</button> */ 
-                        <div className={styles.secoundImg}>
-                           
-                        <img
-                            src={data.secoundImg}
-                            alt="Thumb"
-                            />
-                            <button id="secoundImgBtn" onClick={clickHandler}>حدف عکس</button>
-                            
-                        </div>
-                        :
-                        <div className={styles.imgBox}>
-                        <input style={{display:"none"}} name="secoundImg" onChange={fileuploadHandler} type="file" 
-                        ref={secoundFileUpload} />
-                        <section onClick={() => secoundHandleUpload()} className={styles.divImg}>
-                            <p>عکس مجوز جوجه ریزی</p>
-                        </section>
-                        </div>
-                    }
-                    {data.thirdImg ?/* <button onClick={fileuploadclickHandler}>upload</button> */ 
-                        <div className={styles.thirdImg}>
-                            <img
-                            src={data.thirdImg}
-                            alt="Thumb"
-                            />
-                            <button id="thirdImgBtn" onClick={clickHandler}>حدف عکس</button>
-                        </div>
-                        :
-                        <div className={styles.imgBox}>
-                        <input style={{display:"none"}} name="thirdImg" onChange={fileuploadHandler} type="file" 
-                        ref={thridFileUpload} />
-                        <section onClick={() => thirdHandleUpload()} className={styles.divImg}>
-                            <p>سایر</p>
-                        </section>
-                        </div>
-                    }
-
-                    
-                </div>
-                <button className="btn btn-success mr-2">ثبت</button>
+                <button onClick={sendData} className="btn btn-success mr-2">ثبت</button>
                 <button className="btn btn-light">انصراف</button>
-            </form>
+            </div>
             </div>
         </div>
+        <ToastContainer />
     </div>
   )
 }

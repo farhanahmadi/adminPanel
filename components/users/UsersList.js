@@ -1,6 +1,8 @@
-import React from 'react'
+import axios from 'axios'
+import React,{useState} from 'react'
+import { MainLink } from '../BaseUrl/BaseUrl'
 
-const UsersList = () => {
+const UsersList = ({userlist}) => {
   return (
     <div>
     <div className="col-md-12 grid-margin">
@@ -16,61 +18,25 @@ const UsersList = () => {
                           <th>ID</th>
                           <th>نام</th>
                           <th>نام خانوادگی</th>
+                          <th>شماره تلفن</th>
                           <th>ایمیل</th>
                           <th>عملیات</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td>1</td>
-                          <td>لورم ایپسان</td>
-                          <td>لورم</td>
-                          <td>لورم</td>
-                          <td>
-                              <label className="badge badge-warning">ویرایش</label>
-                              <label className="badge badge-danger">حذف</label>
-                          </td>
+                        {userlist.map(item => 
+                          <tr>
+                            <td>{item.id}</td>
+                            <td>{item.first_name}</td>
+                            <td>{item.last_name}</td>
+                            <td>{item.username}</td>
+                            <td>{item.email}</td>
+                            <td>
+                                <label className="badge badge-warning">ویرایش</label>
+                                <label className="badge badge-danger">حذف</label>
+                            </td>
                         </tr>
-                        <tr>
-                          <td>2</td>
-                          <td>لورم ایپسان</td>
-                          <td>لورم</td>
-                          <td>لورم</td>
-                          <td>
-                              <label className="badge badge-warning">ویرایش</label>
-                              <label className="badge badge-danger">حذف</label>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>3</td>
-                          <td>لورم ایپسان</td>
-                          <td>لورم</td>
-                          <td>لورم</td>
-                          <td>
-                              <label className="badge badge-warning">ویرایش</label>
-                              <label className="badge badge-danger">حذف</label>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>4</td>
-                          <td>لورم ایپسان</td>
-                          <td>لورم</td>
-                          <td>لورم</td>
-                          <td>
-                              <label className="badge badge-warning">ویرایش</label>
-                              <label className="badge badge-danger">حذف</label>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>5</td>
-                          <td>لورم ایپسان</td>
-                          <td>لورم</td>
-                          <td>لورم</td>
-                          <td>
-                              <label className="badge badge-warning">ویرایش</label>
-                              <label className="badge badge-danger">حذف</label>
-                          </td>
-                        </tr>
+                          )}
                       </tbody>
                     </table>
                 </div>
@@ -81,4 +47,9 @@ const UsersList = () => {
   )
 }
 
+
+
+
 export default UsersList
+
+
