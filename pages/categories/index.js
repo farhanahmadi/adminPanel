@@ -6,29 +6,29 @@ import axios from 'axios'
 
 //import components
 import Layout from '../../components/layout/Layout'
-import UsersList from '../../components/users/UsersList'
 import { MainLink } from '../../components/BaseUrl/BaseUrl'
+import CategoriesList from '../../components/categories/CategoriesList'
 
-const index = ({userlist}) => {
+const index = ({categoriesList}) => {
   return (
     <Layout>
         <Head>
-            <title>لیست کاربران</title>
+            <title>لیست دسته بندی ها</title>
         </Head>
-        <UsersList userlist={userlist} />
+        <CategoriesList categoriesList={categoriesList} />
     </Layout>
   )
 }
 
 export async function getServerSideProps(context){
   const {page} = context.query;
-  const userList = await axios.get(`${MainLink}/user/?page=${page ? page : 1}`);
+  const categoriesList = await axios.get(`${MainLink}/categories-m2/?page=${page ? page : 1}`);
 
 
 
-  const userListResponse = userList.data;
+  const categoriesListResponse = categoriesList.data;
   return{
-    props:{userlist: userListResponse }
+    props:{categoriesList: categoriesListResponse }
   }
 }
 

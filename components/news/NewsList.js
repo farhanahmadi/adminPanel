@@ -9,11 +9,15 @@ import { useRouter } from 'next/router';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ReactPaginate from 'react-paginate';
+import * as shamsi from 'shamsi-date-converter';
+
+//import components
+import { descreption } from '../functions/SplitText';
 
 
-const UsersList = ({userlist}) => {
-
-  const [pageCount, setPageCount] = useState(userlist.count / 2);
+const NewsList = ({newsList}) => {
+ 
+    const [pageCount, setPageCount] = useState(newsList.count / 2);
 
     //refresh page
     const router = useRouter();
@@ -21,10 +25,10 @@ const UsersList = ({userlist}) => {
       router.replace(router.asPath);
     }
 
-  const userDeleteHandler = (id , first_name) =>{
-    if (confirm(`آیا مطمعن هستید که کاربر (${first_name}) پاک شود`)) {
-        axios.delete(`${MainLink}/user/${id}/`);
-        toast.success("کاربر با موفقیت حذف شد");
+  const userDeleteHandler = (id , title) =>{
+    if (confirm(`آیا مطمعن هستید که خبر (${title}) پاک شود`)) {
+        axios.delete(`${MainLink}/news/rd/${id}/`);
+        toast.success("خبر با موفقیت حذف شد");
        setTimeout(() =>{
           refreshData();
        },2500)
@@ -48,24 +52,24 @@ const UsersList = ({userlist}) => {
                       <thead>
                         <tr>
                           <th>ID</th>
-                          <th>نام</th>
-                          <th>نام خانوادگی</th>
-                          <th>شماره تلفن</th>
-                          <th>ایمیل</th>
+                          <th>نویسنده</th>
+                          <th>تیتر خبر</th>
+                          <th>متن خبر</th>
+                          <th>تاریخ</th>
                           <th>عملیات</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {userlist.results.map(item => 
+                        {newsList.results.map(item => 
                           <tr>
                             <td>{item.id}</td>
-                            <td>{item.first_name}</td>
-                            <td>{item.last_name}</td>
-                            <td>{item.username}</td>
-                            <td>{item.email}</td>
+                            <td>{item.author.username}</td>
+                            <td>{item.title}</td>
+                            <td>{descreption(item.body)}</td>
+                            <td>{shamsi.gregorianToJalali(item.created_at.split("-")).join("-")}</td>
                             <td>
-                                <Link href={`/users/edit_users/?id=${item.id}`}><label className="badge badge-warning">ویرایش</label></Link>
-                                <label onClick={() => userDeleteHandler(item.id , item.first_name)} className="badge badge-danger">حذف</label>
+                                <Link href={`/news/edit_news/?id=${item.id}`}><label className="badge badge-warning">ویرایش</label></Link>
+                                <label onClick={() => userDeleteHandler(item.id , item.title)} className="badge badge-danger">حذف</label>
                             </td>
                         </tr>
                           )}
@@ -102,9 +106,4 @@ const UsersList = ({userlist}) => {
   )
 }
 
-
-
-
-export default UsersList
-
-
+export default NewsList

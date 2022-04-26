@@ -1,6 +1,41 @@
-import React from 'react'
+import Link from 'next/link'
+import React,{useState} from 'react'
+import { useRouter } from 'next/router';
+import axios from 'axios'
+import { MainLink } from '../BaseUrl/BaseUrl'
 
-const ProductsList = () => {
+//import modules
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import ReactPaginate from 'react-paginate';
+
+
+
+const ProductsList = ({productsList}) => {
+
+  const [pageCount, setPageCount] = useState(productsList.count / 2);
+
+  //refresh page
+  const router = useRouter();
+  const refreshData = () => {
+    router.replace(router.asPath);
+  }
+
+  const productDeleteHandler = (id , productName) =>{
+    if (confirm(`آیا مطمعن هستید که محصول (${productName}) پاک شود`)) {
+        axios.delete(`${MainLink}/products/rd/${id}/`);
+        toast.success("محصول با موفقیت حذف شد");
+       setTimeout(() =>{
+          refreshData();
+       },2500)
+    }
+  }
+
+  const handlePageClick = (event) =>{
+    router.replace(`products/?page=${event.selected + 1}`);
+  }
+
+
   return (
     <div>
         <div className="col-md-12 grid-margin">
@@ -22,67 +57,48 @@ const ProductsList = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            <tr>
-                              <td>1</td>
-                              <td>لورم ایپسان</td>
-                              <td>لورم</td>
-                              <td>25000</td>
-                              <td>20</td>
-                              <td>
-                                  <label className="badge badge-warning">ویرایش</label>
-                                  <label className="badge badge-danger">حذف</label>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>2</td>
-                              <td>لورم ایپسان</td>
-                              <td>لورم</td>
-                              <td>25000</td>
-                              <td>20</td>
-                              <td>
-                                  <label className="badge badge-warning">ویرایش</label>
-                                  <label className="badge badge-danger">حذف</label>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>3</td>
-                              <td>لورم ایپسان</td>
-                              <td>لورم</td>
-                              <td>25000</td>
-                              <td>20</td>
-                              <td>
-                                  <label className="badge badge-warning">ویرایش</label>
-                                  <label className="badge badge-danger">حذف</label>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>4</td>
-                              <td>لورم ایپسان</td>
-                              <td>لورم</td>
-                              <td>25000</td>
-                              <td>20</td>
-                              <td>
-                                  <label className="badge badge-warning">ویرایش</label>
-                                  <label className="badge badge-danger">حذف</label>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td>5</td>
-                              <td>لورم ایپسان</td>
-                              <td>لورم</td>
-                              <td>25000</td>
-                              <td>20</td>
-                              <td>
-                                  <label className="badge badge-warning">ویرایش</label>
-                                  <label className="badge badge-danger">حذف</label>
-                              </td>
-                            </tr>
+                            {productsList.results.map(item =>
+                                 <tr key={item.id}>
+                                 <td>{item.id}</td>
+                                 <td>{item.name}</td>
+                                 <td>{item.categories.map(category => category.name + "/")}</td>
+                                 <td>{item.price}</td>
+                                 <td>{item.repository_quantity}</td>
+                                 <td>
+                                     <Link href={`/products/edit_products/?id=${item.id}`}><label className="badge badge-warning">ویرایش</label></Link>
+                                     <label onClick={() => productDeleteHandler(item.id , item.name)} className="badge badge-danger">حذف</label>
+                                 </td>
+                               </tr>
+                              )}
                           </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
+        <div className="styles.pagination">
+        <ReactPaginate
+          nextLabel="بعدی >"
+          onPageChange={handlePageClick}
+          pageRangeDisplayed={3}
+          marginPagesDisplayed={2}
+          pageCount={pageCount}
+          previousLabel="< قبلی"
+          pageClassName="page-item"
+          pageLinkClassName="page-link"
+          previousClassName="page-item"
+          previousLinkClassName="page-link"
+          nextClassName="page-item"
+          nextLinkClassName="page-link"
+          breakLabel="..."
+          breakClassName="page-item"
+          breakLinkClassName="page-link"
+          containerClassName="pagination"
+          activeClassName="active"
+          renderOnZeroPageCount={null}
+      />
+        </div>
+        <ToastContainer />
     </div>
   )
 }

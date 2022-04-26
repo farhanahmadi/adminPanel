@@ -27,3 +27,10 @@ body {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+.pagination{
+  justify-content: center;
+  direction: ltr;
+}
+.pagination a{
+  padding: 12px;
+}

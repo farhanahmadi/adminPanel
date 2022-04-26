@@ -1,30 +1,22 @@
+//import modules
 import React from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 
 
-
 const Layout = ({children}) => {
   return (
-    <div>
+    <>
       <Head>
       <meta charset="utf-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-      <link rel="stylesheet" href="/assets/vendors/iconfonts/mdi/css/materialdesignicons.min.css" />
-      <link rel="stylesheet" href="/assets/vendors/iconfonts/ionicons/css/ionicons.css" />
-      <link rel="stylesheet" href="/assets/vendors/iconfonts/typicons/src/font/typicons.css" />
-      <link rel="stylesheet" href="/assets/vendors/iconfonts/flag-icon-css/css/flag-icon.min.css" />
-      <link rel="stylesheet" href="/assets/vendors/css/vendor.bundle.base.css" />
-      <link rel="stylesheet" href="/assets/vendors/css/vendor.bundle.addons.css" />
-      <link rel="stylesheet" href="/assets/css/shared/style.css" />
-      <link rel="stylesheet" href="/assets/css/demo_1/style.css" />
-      <link rel="shortcut icon" href="/assets/images/favicon.png" />
       <script src="/assets/vendors/js/vendor.bundle.base.js"></script>
       <script src="/assets/vendors/js/vendor.bundle.addons.js"></script>
       <script src="/assets/js/shared/off-canvas.js"></script>
       <script src="/assets/js/shared/misc.js"></script>
       <script src="/assets/js/demo_1/dashboard.js"></script>
       </Head>
+      
 
     <div className="container-scroller">
     <nav className="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
@@ -89,7 +81,7 @@ const Layout = ({children}) => {
                   <Link href="/products/"><a className="nav-link" >لیست محصولات</a></Link>
                 </li>
                 <li className="nav-item">
-                  <Link href="/products/add_products/"><a className="nav-link" >افزردن محصول</a></Link>
+                  <Link href={"/products/add_products/"}><a className="nav-link" >افزردن محصول</a></Link>
                 </li>
               </ul>
             </div>
@@ -97,7 +89,7 @@ const Layout = ({children}) => {
           <li className="nav-item">
             <a className="nav-link" href="pages/forms/basic_elements.html">
               <i className="menu-icon typcn typcn-shopping-bag"></i>
-              <span className="menu-title">سفارشات</span>
+              <Link href={"/orders/"}><span className="menu-title">سفارشات</span></Link>
             </a>
           </li>
           <li className="nav-item">
@@ -109,10 +101,10 @@ const Layout = ({children}) => {
             <div className="collapse" id="users">
               <ul className="nav flex-column sub-menu">
                 <li className="nav-item">
-                  <Link href="/users/"><a className="nav-link" >لیست کاربران</a></Link>
+                  <Link href={"/users/"}><a className="nav-link" >لیست کاربران</a></Link>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="pages/ui-features/dropdowns.html">افزردن کاربر</a>
+                  <Link href={"/users/newUser"}><a className="nav-link" href="pages/ui-features/dropdowns.html">افزردن کاربر</a></Link>
                 </li>
               </ul>
             </div>
@@ -120,7 +112,7 @@ const Layout = ({children}) => {
           <li className="nav-item">
             <a className="nav-link" href="pages/forms/basic_elements.html">
               <i className="menu-icon typcn typcn-shopping-bag"></i>
-              <span className="menu-title">گزارشات</span>
+              <Link href={"/reports"}><span className="menu-title">گزارشات</span></Link>
             </a>
           </li>
           <li className="nav-item">
@@ -132,10 +124,10 @@ const Layout = ({children}) => {
             <div className="collapse" id="discount">
               <ul className="nav flex-column sub-menu">
                 <li className="nav-item">
-                  <Link href="products"><a className="nav-link" >لیست تخفیفات</a></Link>
+                  <Link href={"/discount/"}><a className="nav-link" >لیست تخفیفات</a></Link>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="pages/ui-features/dropdowns.html">افزردن تخفیف</a>
+                  <Link href={"/discount/add_discount"}><a className="nav-link" href="pages/ui-features/dropdowns.html">افزردن تخفیف</a></Link>
                 </li>
               </ul>
             </div>
@@ -149,10 +141,27 @@ const Layout = ({children}) => {
             <div className="collapse" id="categories">
               <ul className="nav flex-column sub-menu">
                 <li className="nav-item">
-                  <a className="nav-link" href="pages/ui-features/buttons.html">لیست دسته بندی ها</a>
+                  <Link href={"/categories"}><a className="nav-link" href="pages/ui-features/buttons.html">لیست دسته بندی ها</a></Link>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="pages/ui-features/dropdowns.html">افزردن دسته بندی</a>
+                <Link href={"/categories"}><a className="nav-link" href="pages/ui-features/dropdowns.html">افزردن دسته بندی</a></Link>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link" data-toggle="collapse" href="#news" aria-expanded="false" aria-controls="news">
+              <i className="menu-icon typcn typcn-coffee"></i>
+              <span className="menu-title">اخبار</span>
+              <i className="menu-arrow"></i>
+            </a>
+            <div className="collapse" id="news">
+              <ul className="nav flex-column sub-menu">
+                <li className="nav-item">
+                  <Link href={"/news"}><a className="nav-link" href="pages/ui-features/buttons.html">لیست اخبار</a></Link>
+                </li>
+                <li className="nav-item">
+                <Link href={"/news/add_news"}><a className="nav-link" href="pages/ui-features/dropdowns.html">افزردن خبر </a></Link>
                 </li>
               </ul>
             </div>
@@ -190,7 +199,7 @@ const Layout = ({children}) => {
       </div>
     </div>
     </div>
-  </div>
+  </>
   )
 }
 

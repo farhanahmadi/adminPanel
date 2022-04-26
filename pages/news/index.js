@@ -6,29 +6,29 @@ import axios from 'axios'
 
 //import components
 import Layout from '../../components/layout/Layout'
-import UsersList from '../../components/users/UsersList'
 import { MainLink } from '../../components/BaseUrl/BaseUrl'
+import NewsList from '../../components/news/NewsList'
 
-const index = ({userlist}) => {
+const index = ({newsList}) => {
   return (
     <Layout>
         <Head>
-            <title>لیست کاربران</title>
+            <title>لیست اخبار</title>
         </Head>
-        <UsersList userlist={userlist} />
+        <NewsList newsList={newsList} />
     </Layout>
   )
 }
 
 export async function getServerSideProps(context){
   const {page} = context.query;
-  const userList = await axios.get(`${MainLink}/user/?page=${page ? page : 1}`);
+  const newsList = await axios.get(`${MainLink}/news/?page=${page ? page : 1}`);
 
 
 
-  const userListResponse = userList.data;
+  const newsListResponse = newsList.data;
   return{
-    props:{userlist: userListResponse }
+    props:{newsList: newsListResponse }
   }
 }
 
