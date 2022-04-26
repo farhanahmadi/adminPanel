@@ -11,13 +11,11 @@ import 'react-toastify/dist/ReactToastify.css';
 import ReactPaginate from 'react-paginate';
 import * as shamsi from 'shamsi-date-converter';
 
-//import components
-import { descreption } from '../functions/SplitText';
 
 
-const NewsList = ({newsList}) => {
- 
-    const [pageCount, setPageCount] = useState(newsList.count / 2);
+const ReturnedList = ({returnedList}) => {
+
+  const [pageCount, setPageCount] = useState(returnedList.count / 2);
 
     //refresh page
     const router = useRouter();
@@ -25,18 +23,8 @@ const NewsList = ({newsList}) => {
       router.replace(router.asPath);
     }
 
-  const userDeleteHandler = (id , title) =>{
-    if (confirm(`آیا مطمعن هستید که خبر (${title}) پاک شود`)) {
-        axios.delete(`${MainLink}/news/rd/${id}/`);
-        toast.success("خبر با موفقیت حذف شد");
-       setTimeout(() =>{
-          refreshData();
-       },2500)
-    }
-  }
-
   const handlePageClick = (event) =>{
-    router.replace(`/news/?page=${event.selected + 1}`);
+    router.replace(`/returned/?page=${event.selected + 1}`);
   }
 
   return (
@@ -45,31 +33,28 @@ const NewsList = ({newsList}) => {
               <div className="card">
                 <div className="card-body">
                   <div className="d-flex justify-content-between">
-                    <h4 className="card-title mb-0">لیست کاربران</h4>
+                    <h4 className="card-title mb-0">لیست مرجوعی</h4>
                   </div>
                   <div className="table-responsive">
                     <table className="table table-striped table-hover">
                       <thead>
                         <tr>
                           <th>ID</th>
-                          <th>نویسنده</th>
-                          <th>تیتر خبر</th>
-                          <th>متن خبر</th>
+                          <th>خریدار</th>
                           <th>تاریخ</th>
+                          <th>وضعیت</th>
                           <th>عملیات</th>
                         </tr>
                       </thead>
                       <tbody>
-                        {newsList.results.map(item => 
+                        {returnedList.results.map(item => 
                           <tr>
                             <td>{item.id}</td>
-                            <td>{item.author.username}</td>
-                            <td>{item.title}</td>
-                            <td>{descreption(item.body)}</td>
+                            <td>{item.user.username}</td>
                             <td>{shamsi.gregorianToJalali(item.created_at.split("-")).join("-")}</td>
+                            <td>{item.Confirmation ? <label className="badge badge-success">تایید شده</label> : <label className="badge badge-danger">تایید نشده</label> }</td>
                             <td>
-                                <Link href={`/news/edit_news/?id=${item.id}`}><label className="badge badge-warning">ویرایش</label></Link>
-                                <label onClick={() => userDeleteHandler(item.id , item.title)} className="badge badge-danger">حذف</label>
+                                <Link href={`/returned/edit_returned/?id=${item.id}`}><label className="badge badge-warning">ویرایش</label></Link>
                             </td>
                         </tr>
                           )}
@@ -106,4 +91,9 @@ const NewsList = ({newsList}) => {
   )
 }
 
-export default NewsList
+
+
+
+export default ReturnedList
+
+
