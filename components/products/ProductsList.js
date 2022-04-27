@@ -14,6 +14,8 @@ import ReactPaginate from 'react-paginate';
 const ProductsList = ({productsList}) => {
 
   const [pageCount, setPageCount] = useState(productsList.count / 2);
+  const [search, setSearch] = useState('');
+
 
   //refresh page
   const router = useRouter();
@@ -32,7 +34,12 @@ const ProductsList = ({productsList}) => {
   }
 
   const handlePageClick = (event) =>{
-    router.replace(`products/?page=${event.selected + 1}`);
+    router.replace(`/products/?page=${event.selected ? event.selected +1 : 1}&search=${search}`);
+
+  }
+
+  const searchHandler = (event) =>{
+      setSearch(event.target.value);
   }
 
 
@@ -41,6 +48,10 @@ const ProductsList = ({productsList}) => {
         <div className="col-md-12 grid-margin">
                   <div className="card">
                     <div className="card-body">
+                    <div className="form-group">
+                    <input type="text" name='username' className="form-control form-control-lg searchInput" placeholder="جستجو ..." value={search} onChange={searchHandler} />
+                    <button className='serachBtn' onClick={handlePageClick}>جستجو</button>
+                    </div>
                       <div className="d-flex justify-content-between">
                         <h4 className="card-title mb-0">لیست محصولات</h4>
                       </div>

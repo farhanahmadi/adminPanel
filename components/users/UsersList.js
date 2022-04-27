@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React,{useState} from 'react'
+import React,{useState , useEffect} from 'react'
 import { MainLink } from '../BaseUrl/BaseUrl'
 import Link from 'next/link'
 import { useRouter } from 'next/router';
@@ -13,13 +13,19 @@ import ReactPaginate from 'react-paginate';
 
 const UsersList = ({userlist}) => {
 
-  const [pageCount, setPageCount] = useState(userlist.count / 2);
+  const [pageCount, setPageCount] = useState(Math.round(userlist.count / 2));
+  const [search, setSearch] = useState('');
 
     //refresh page
     const router = useRouter();
     const refreshData = () => {
       router.replace(router.asPath);
     }
+
+    useEffect(() =>{
+      setPageCount(Math.round(userlist.count / 2));
+    },[userlist])
+
 
   const userDeleteHandler = (id , first_name) =>{
     if (confirm(`آیا مطمعن هستید که کاربر (${first_name}) پاک شود`)) {
@@ -32,7 +38,11 @@ const UsersList = ({userlist}) => {
   }
 
   const handlePageClick = (event) =>{
-    router.replace(`/users/?page=${event.selected + 1}`);
+    router.replace(`/users/?page=${event.selected ? event.selected +1 : 1}&search=${search}`);
+  }
+
+  const searchHandler = (event) =>{
+      setSearch(event.target.value);
   }
 
   return (
@@ -40,6 +50,10 @@ const UsersList = ({userlist}) => {
     <div className="col-md-12 grid-margin">
               <div className="card">
                 <div className="card-body">
+                  <div className="form-group">
+                    <input type="text" name='username' className="form-control form-control-lg searchInput" placeholder="جستجو ..." value={search} onChange={searchHandler} />
+                    <button className='serachBtn' onClick={handlePageClick}>جستجو</button>
+                    </div>
                   <div className="d-flex justify-content-between">
                     <h4 className="card-title mb-0">لیست کاربران</h4>
                   </div>

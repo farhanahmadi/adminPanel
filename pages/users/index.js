@@ -22,7 +22,9 @@ const index = ({userlist}) => {
 
 export async function getServerSideProps(context){
   const {page} = context.query;
-  const userList = await axios.get(`${MainLink}/user/?page=${page ? page : 1}`);
+  const {search} = context.query;
+  const userList = await axios.get(`${MainLink}/user/?${page ? `page= ${page}` : null}&search=${search ? search : ''}`);
+  console.log(search);
 
 
 

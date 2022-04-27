@@ -22,7 +22,8 @@ const index = ({productsList}) => {
 
 export async function getServerSideProps(context){
   const {page} = context.query;
-  const productsList = await axios.get(`${MainLink}/products/?page=${page ? page : 1}`);
+  const {search} = context.query;
+  const productsList = await axios.get(`${MainLink}/products/?page=${page ? page : 1}&search=${search ? search : null}`);
 
 
 
