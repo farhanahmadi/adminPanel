@@ -18,6 +18,7 @@ const UsersList = ({userlist}) => {
 
     //refresh page
     const router = useRouter();
+    const paginationNumber = router.query.page;
     const refreshData = () => {
       router.replace(router.asPath);
     }
@@ -96,6 +97,7 @@ const UsersList = ({userlist}) => {
           pageRangeDisplayed={3}
           marginPagesDisplayed={2}
           pageCount={pageCount}
+          forcePage={router.query.page ? Number(paginationNumber - 1) : 0}
           previousLabel="< قبلی"
           pageClassName="page-item"
           pageLinkClassName="page-link"

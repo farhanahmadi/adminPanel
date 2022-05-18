@@ -22,6 +22,7 @@ const AddProducts = ({categoriesList}) => {
     const [photo , setPhoto] = useState(null);
     const [photo1 , setPhoto1] = useState(null);
     const [photo2 , setPhoto2] = useState(null);
+    const [video , setVideo] = useState(null);
     const [pdf , setPdf] = useState(null);
 
     const [data , setData] = useState({
@@ -37,6 +38,7 @@ const AddProducts = ({categoriesList}) => {
         firstImg: null ,
         secoundImg: null,
         thirdImg: null,
+        video: null
     })
 
     const setDataValue = (event) =>{
@@ -66,6 +68,9 @@ const AddProducts = ({categoriesList}) => {
     }else if(event.target.name === "thirdImg"){
         setData({...data ,thirdImg: URL.createObjectURL(event.target.files[0])})
         setPhoto2(event.target.files[0]);
+    }else if(event.target.name === "video"){
+        setData({...data ,video: URL.createObjectURL(event.target.files[0])})
+        setVideo(event.target.files[0]);
     }
     }
     // 
@@ -98,6 +103,7 @@ const AddProducts = ({categoriesList}) => {
         data.firstImg  && photo && formData.append('image' , photo , photo.name);
         data.secoundImg  && photo1 && formData.append('image2' , photo1 , photo1.name );
         data.thirdImg  && photo2 && formData.append('image3' , photo2 , photo2.name );
+        data.video  && video && formData.append('product_video' , video , video.name );
         formData.append('name' , data.name);
         formData.append('categories' , data.category);
         formData.append('categories' , data.subCategory);
@@ -171,6 +177,10 @@ const AddProducts = ({categoriesList}) => {
                 <div className="form-group">
                 <label htmlFor="exampleInputPdffile">آپلود فایل </label>
                 <input name='pdffile' type="file" className="form-control form-control-lg" id="exampleInputPdffile" placeholder="اپلود فایل " onChange={setDataValue} />
+                </div>
+                <div className="form-group">
+                <label htmlFor="exampleInputvideo">آپلود ویدیو </label>
+                <input name='video' type="file" className="form-control form-control-lg" id="exampleInputPvideo" placeholder="اپلود ویدیو " onChange={fileuploadHandler} />
                 </div>
                 <div className="form-group">
                 <label htmlFor="exampleTextarea">توضیحات</label>

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import React,{useState} from 'react'
+import React,{useState , useEffect} from 'react'
 import { useRouter } from 'next/router';
 import axios from 'axios'
 import { MainLink } from '../BaseUrl/BaseUrl'
@@ -19,9 +19,14 @@ const ProductsList = ({productsList}) => {
 
   //refresh page
   const router = useRouter();
+  const paginationNumber = router.query.page;
   const refreshData = () => {
     router.replace(router.asPath);
   }
+
+  useEffect(() =>{
+    setPageCount(Math.round(productsList.count / 2));
+  },[productsList])
 
   const productDeleteHandler = (id , productName) =>{
     if (confirm(`آیا مطمعن هستید که محصول (${productName}) پاک شود`)) {
@@ -94,6 +99,7 @@ const ProductsList = ({productsList}) => {
           pageRangeDisplayed={3}
           marginPagesDisplayed={2}
           pageCount={pageCount}
+          forcePage={router.query.page ? Number(paginationNumber - 1) : 0}
           previousLabel="< قبلی"
           pageClassName="page-item"
           pageLinkClassName="page-link"

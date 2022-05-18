@@ -22,8 +22,8 @@ const index = ({returnedList}) => {
 
 export async function getServerSideProps(context){
   const {page} = context.query;
-  const returnedList = await axios.get(`${MainLink}/refunds/?page=${page ? page : 1}`);
-
+  const {search} = context.query;
+  const returnedList = await axios.get(`${MainLink}/refunds/?page=${page ? page : 1}&search=${search ? search : ''}`);
 
 
   const returnedListResponse = returnedList.data;

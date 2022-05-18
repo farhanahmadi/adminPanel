@@ -22,7 +22,8 @@ const index = ({newsList}) => {
 
 export async function getServerSideProps(context){
   const {page} = context.query;
-  const newsList = await axios.get(`${MainLink}/news/?page=${page ? page : 1}`);
+  const {search} = context.query;
+  const newsList = await axios.get(encodeURI(`${MainLink}/news/?page=${page ? page : 1}&search=${search ? search : ''}`));
 
 
 
